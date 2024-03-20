@@ -82,22 +82,13 @@ int main() {
             }
 
             else if (command == "list") {
-                auto vec = pEproms->getEproms();
-                if (vec.size() ==0){
-                    cout<<"No existing eprom files"<<endl;
-                }
-                else {
-                    cout<< "Existing eprom files are:"<<endl;
-                    for (auto it : vec){
-                        cout<< it.getFileName()<<endl;
-                    }
-                }
+                listFiles(pEproms);
                 continue;
             }
 
             else if (command == "erase") {
                 pEproms->eraseContent();
-                string file = (pEproms->getEproms())[pEproms->getCursor()].getFileName();
+                string file = pEproms->getLoadedFile();
                 cout<<"File '"<<file<<"'s content is erased."<<endl;
                 continue;
             }
@@ -106,7 +97,7 @@ int main() {
                 string inputFileName;
                 cin >> inputFileName;
                 pEproms->inputFile(inputFileName);
-                string file = (pEproms->getEproms())[pEproms->getCursor()].getFileName();
+                string file = pEproms->getLoadedFile();
                 cout<<"File '"<<file<<"'s content is overwritten by file '"<<inputFileName<<"'"<<endl;
                 continue;
             }
@@ -185,7 +176,7 @@ int main() {
                     str_bytes[i/2] =ch;
                 }
                 pEproms->writeRaw(address, str_bytes);
-                string file = (pEproms->getEproms())[pEproms->getCursor()].getFileName();
+                string file = pEproms->getLoadedFile();
                 cout<<"Write to File '"<<file<<"'"<<endl;
                 continue;
             }

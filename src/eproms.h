@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include "eprom.h"
+#include <map>
 
 using namespace std;
 
@@ -12,13 +13,11 @@ using namespace std;
 
 class Eproms {
     private:
-    // the index of _eprom_files. 
-    // The member of _eprom_files pointed by cursor is active for subsequen operations when it's in the range of _eprom_files.
-    // It's invalid when less than 0, or out of range
-    int _cursor = -1;   
-    vector<Eprom> _eprom_files;
-    Eproms* _pEproms = NULL;
-    Eproms(){};
+    // the selected active file; Empty means no file is selected 
+    string _loadedFile;
+    map<string, Eprom> _eprom_files;
+
+    Eproms():_eprom_files(){};
 
     static Eproms eproms;
     public:
@@ -28,8 +27,8 @@ class Eproms {
         return &eproms;
     }
 
-    int getCursor(){
-        return _cursor;
+    string getLoadedFile(){
+        return _loadedFile;
     }
 
     // fill _eprom_files with members corresponding to the exsting eprom files in the managed location
@@ -59,7 +58,11 @@ class Eproms {
 
     // return _eprom_files list 
     vector<Eprom> getEproms(){
-        return _eprom_files;
+        vector<Eprom> vec;
+        for(auto it = _eprom_files.begin(); it!=_eprom_files.end(); it++){
+            vec.push_back(it->second);
+        }
+        return vec;
     }
 };
 
